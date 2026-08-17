@@ -70,10 +70,12 @@
 
 
 import KPICard from "@/components/KPICard";
-import { getKPIs } from "@/lib/api";
+import RevenueChart from "@/components/RevenueChart";
+import { getKPIs, getSalesTrend } from "@/lib/api";
 
 export default async function Home() {
     const kpis = await getKPIs();
+    const trend = await getSalesTrend("monthly");
 
     return (
         <main className="min-h-screen bg-gray-50 p-8">
@@ -109,6 +111,10 @@ export default async function Home() {
                         value={kpis.unique_products}
                     />
 
+                </section>
+
+                <section className="mt-8">
+                    <RevenueChart data={trend} />
                 </section>
 
             </div>

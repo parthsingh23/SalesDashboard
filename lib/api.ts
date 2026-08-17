@@ -3,10 +3,10 @@ import type {
     RegionSales,
     CategorySales,
     SalesTrend,
-    TopProduct
+    TopProduct,
 } from "@/types/analytics";
 
-const API_URL = "https://sales-analytics-api-parth.onrender.com"
+const API_URL = "https://sales-analytics-api-parth.onrender.com";
 
 async function fetchAPI<T>(endpoint: string): Promise<T> {
     const response = await fetch(`${API_URL}${endpoint}`);
@@ -19,5 +19,13 @@ async function fetchAPI<T>(endpoint: string): Promise<T> {
 }
 
 export async function getKPIs(): Promise<KPIResponse> {
-    return fetchAPI<KPIResponse>("/analytics/kpis")
+    return fetchAPI<KPIResponse>("/analytics/kpis");
+}
+
+export async function getSalesTrend(
+    granularity: "daily" | "weekly" | "monthly" | "yearly"
+): Promise<SalesTrend[]> {
+    return fetchAPI<SalesTrend[]>(
+        `/analytics/sales/trend?granularity=${granularity}`
+    );
 }
