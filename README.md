@@ -1,36 +1,136 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+# Sales Dashboard
+
+A modern, responsive sales analytics dashboard for exploring revenue, sales performance, product rankings, and category breakdowns over a selected date range.
+
+**Live demo:** [sales-dashboard-ebon-one.vercel.app](https://sales-dashboard-ebon-one.vercel.app/)
+
+## Overview
+
+Sales Dashboard presents business data through interactive KPI cards, charts, tables, and date-based filtering. It is built as a Next.js application with a component-based TypeScript frontend and API routes for sales and analytics data.
+
+## Features
+
+- Filter dashboard results by a custom date range.
+- View key performance indicators for sales activity.
+- Track revenue trends over time with a revenue chart.
+- Review sales or revenue breakdowns by category.
+- Inspect top-performing products in a dedicated table.
+- Browse detailed sales records in a data table.
+- Use responsive UI components suitable for desktop and smaller screens.
+- Fetch dashboard information through application API routes.
+
+## Tech Stack
+
+- [Next.js](https://nextjs.org/) with the App Router.
+- React and TypeScript.
+- Tailwind CSS and PostCSS-based styling.
+- Recharts for data visualizations.
+- ESLint for code-quality checks.
+
+## Project Structure
+
+```text
+.
+├── app/
+│   ├── api/
+│   │   ├── analytics/
+│   │   │   └── top/
+│   │   └── sales/
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+├── components/
+│   ├── BreakdownChart.tsx
+│   ├── ChartCard.tsx
+│   ├── DataTable.tsx
+│   ├── DateRangeFilter.tsx
+│   ├── KPICard.tsx
+│   ├── RevenueChart.tsx
+│   └── TopProductsTable.tsx
+├── lib/
+├── public/
+├── types/
+│   └── analytics.ts
+├── next.config.ts
+├── package.json
+└── tsconfig.json
+```
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18.18 or later.
+- npm, pnpm, yarn, or another compatible package manager.
+
+### Installation
+
+Clone the repository and install its dependencies:
+
+```bash
+git clone https://github.com/parthsingh23/SalesDashboard.git
+cd SalesDashboard
+npm install
+```
+
+### Run locally
+
+Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Production build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create and run a production build:
 
-## Learn More
+```bash
+npm run build
+npm run start
+```
 
-To learn more about Next.js, take a look at the following resources:
+### Lint the project
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run lint
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## API Routes
 
-## Deploy on Vercel
+The application organizes backend endpoints under `app/api`:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `/api/sales` — sales-related dashboard data.
+- `/api/analytics/top` — top-product or top-performance analytics.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The exact response shapes are defined in the TypeScript models under `types/analytics.ts`.
+
+## Main Components
+
+- `DateRangeFilter` controls the reporting period.
+- `KPICard` displays a headline metric.
+- `RevenueChart` visualizes revenue trends.
+- `BreakdownChart` presents category or segment breakdowns.
+- `TopProductsTable` ranks products by performance.
+- `DataTable` displays detailed records.
+- `ChartCard` provides a reusable container for chart sections.
+
+## Deployment
+
+The project is deployed on Vercel. To deploy your own instance:
+
+1. Import the repository into [Vercel](https://vercel.com/).
+2. Keep the default Next.js build settings unless your environment requires changes.
+3. Configure any required environment variables in the Vercel project settings.
+4. Deploy the application.
+
+## License
+
+No license file is currently included in the repository. Add an appropriate license before distributing or reusing the project publicly.
+
+## Links
+
+- [Live application](https://sales-dashboard-ebon-one.vercel.app/)
