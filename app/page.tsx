@@ -68,56 +68,46 @@
 //   );
 // }
 
-
 import KPICard from "@/components/KPICard";
 import RevenueChart from "@/components/RevenueChart";
 import { getKPIs, getSalesTrend } from "@/lib/api";
 
 export default async function Home() {
-    const kpis = await getKPIs();
-    const trend = await getSalesTrend("monthly");
+  const kpis = await getKPIs();
+  const trend = await getSalesTrend("monthly");
 
-    return (
-        <main className="min-h-screen bg-gray-50 p-8">
-            <div className="mx-auto max-w-7xl">
+  return (
+    <main className="min-h-screen bg-gray-50 p-8">
+      <div className="mx-auto max-w-7xl">
+        <h1 className="text-3xl font-bold text-gray-900">
+          Sales Analytics Dashboard
+        </h1>
 
-                <h1 className="text-3xl font-bold text-gray-900">
-                    Sales Analytics Dashboard
-                </h1>
+        <p className="mt-2 text-gray-600">Overview of sales performance</p>
 
-                <p className="mt-2 text-gray-600">
-                    Overview of sales performance
-                </p>
+        <section className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <KPICard
+            title="Total Revenue"
+            value={`₹${kpis.total_revenue.toLocaleString()}`}
+          />
 
-                <section className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <KPICard
+            title="Units Sold"
+            value={kpis.total_units_sold.toLocaleString()}
+          />
 
-                    <KPICard
-                        title="Total Revenue"
-                        value={`₹${kpis.total_revenue.toLocaleString()}`}
-                    />
+          <KPICard
+            title="Average Price"
+            value={`₹${kpis.average_price.toLocaleString()}`}
+          />
 
-                    <KPICard
-                        title="Units Sold"
-                        value={kpis.total_units_sold.toLocaleString()}
-                    />
+          <KPICard title="Unique Products" value={kpis.unique_products} />
+        </section>
 
-                    <KPICard
-                        title="Average Price"
-                        value={`₹${kpis.average_price.toLocaleString()}`}
-                    />
-
-                    <KPICard
-                        title="Unique Products"
-                        value={kpis.unique_products}
-                    />
-
-                </section>
-
-                <section className="mt-8">
-                    <RevenueChart data={trend} />
-                </section>
-
-            </div>
-        </main>
-    );
+        <section className="mt-8">
+          <RevenueChart initialData={trend} />
+        </section>
+      </div>
+    </main>
+  );
 }
