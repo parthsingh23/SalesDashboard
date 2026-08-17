@@ -9,6 +9,9 @@ interface TopProductsTableProps {
   endDate?: string;
 }
 
+type SortKey = "units_sold";
+type SortDirection = "asc" | "desc";
+
 export default function TopProductsTable({
   initialProducts,
   startDate,
@@ -19,6 +22,10 @@ export default function TopProductsTable({
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const [sortKey, setSortKey] = useState<SortKey>("units_sold");
+
+  const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
 
   useEffect(() => {
     async function loadProducts() {
@@ -56,6 +63,33 @@ export default function TopProductsTable({
 
     loadProducts();
   }, [limit, startDate, endDate]);
+
+  function handleSort(key: SortKey) {
+    if (sortKey === key) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortKey(key);
+      setSortDirection(key === "units_sold" ? "desc" : "asc");
+    }
+  }
+
+  const sortedProducts = [...products].sort((a, b) => {
+    let comparison = 0;
+
+    if (sortKey === "units_sold") {
+      comparison = a.units_sold - b.units_sold;
+    }
+
+    return sortDirection === "asc" ? comparison : -comparison;
+  });
+
+  function sortIndicator(key: SortKey) {
+    if (sortKey !== key) {
+      return "↕";
+    }
+
+    return sortDirection === "asc" ? "↑" : "↓";
+  }
 
   return (
     <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
@@ -111,16 +145,26 @@ export default function TopProductsTable({
               <tr>
                 <th className="px-4 py-3 font-semibold">SL NO.</th>
 
-                <th className="px-4 py-3 font-semibold">Product ID</th>
+                <th className="px-4 py-3 font-semibold">
+                  <button>                  
+                    Product ID
+                  </button>
+                </th>
 
                 <th className="px-4 py-3 text-right font-semibold">
-                  Units Sold
+                  <button
+                    type="button"
+                    onClick={() => handleSort("units_sold")}
+                    className="font-semibold"
+                  >
+                    Units Sold {sortIndicator("units_sold")}
+                  </button>
                 </th>
               </tr>
             </thead>
 
             <tbody>
-              {products.map((product, index) => (
+              {sortedProducts.map((product, index) => (
                 <tr
                   key={product.product_id}
                   className="border-b border-gray-200 last:border-0"
