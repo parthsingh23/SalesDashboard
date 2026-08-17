@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { TopProduct } from "@/types/analytics";
+import DataTable from "@/components/DataTable";
 
 interface TopProductsTableProps {
   initialProducts: TopProduct[];
@@ -140,48 +141,36 @@ export default function TopProductsTable({
         {error && <div className="py-8 text-center text-red-600">{error}</div>}
 
         {!loading && !error && (
-          <table className="w-full text-left text-sm text-gray-900">
-            <thead className="border-b border-gray-300">
-              <tr>
-                <th className="px-4 py-3 font-semibold">SL NO.</th>
-
-                <th className="px-4 py-3 font-semibold">
-                  <button>                  
-                    Product ID
-                  </button>
-                </th>
-
-                <th className="px-4 py-3 text-right font-semibold">
-                  <button
-                    type="button"
-                    onClick={() => handleSort("units_sold")}
-                    className="font-semibold"
-                  >
-                    Units Sold {sortIndicator("units_sold")}
-                  </button>
-                </th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {sortedProducts.map((product, index) => (
-                <tr
-                  key={product.product_id}
-                  className="border-b border-gray-200 last:border-0"
+          <DataTable
+            headers={[
+              "SL NO.",
+              <button>Product ID</button>,
+              <div key="units-sold" className="text-right">
+                <button
+                  type="button"
+                  onClick={() => handleSort("units_sold")}
+                  className="font-semibold"
                 >
-                  <td className="px-4 py-3">{index + 1}</td>
+                  Units Sold {sortIndicator("units_sold")}
+                </button>
+              </div>,
+            ]}
+          >
+            {sortedProducts.map((product, index) => (
+              <tr
+                key={product.product_id}
+                className="border-b border-gray-200 last:border-0"
+              >
+                <td className="px-4 py-3">{index + 1}</td>
 
-                  <td className="px-4 py-3 font-medium">
-                    {product.product_id}
-                  </td>
+                <td className="px-4 py-3 font-medium">{product.product_id}</td>
 
-                  <td className="px-4 py-3 text-right">
-                    {product.units_sold.toLocaleString("en-IN")}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                <td className="px-4 py-3 text-right">
+                  {product.units_sold.toLocaleString("en-IN")}
+                </td>
+              </tr>
+            ))}
+          </DataTable>
         )}
       </div>
     </div>

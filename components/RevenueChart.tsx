@@ -12,6 +12,7 @@ import {
 } from "recharts";
 
 import type { SalesTrend } from "@/types/analytics";
+import ChartCard from "@/components/ChartCard";
 
 type Granularity = "daily" | "weekly" | "monthly" | "yearly";
 
@@ -72,15 +73,11 @@ export default function RevenueChart({
   }, [granularity, startDate, endDate]);
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h2 className="text-lg font-semibold text-gray-900">Revenue Trend</h2>
-
-          <p className="text-sm text-gray-500">Sales revenue over time</p>
-        </div>
-
-        <div className="flex gap-2">
+    <ChartCard
+      title="Revenue Trend"
+      description="Sales revenue over time"
+      action={
+        <div className="flex flex-wrap gap-2">
           {(["daily", "weekly", "monthly", "yearly"] as Granularity[]).map(
             (option) => (
               <button
@@ -97,11 +94,11 @@ export default function RevenueChart({
             ),
           )}
         </div>
-      </div>
-
-      <div className="mt-6 h-80">
+      }
+    >
+      <div className="h-80">
         {loading && (
-          <div className="flex h-full items-center justify-center">
+          <div className="flex h-full items-center justify-center text-gray-500">
             Loading chart...
           </div>
         )}
@@ -128,6 +125,6 @@ export default function RevenueChart({
           </ResponsiveContainer>
         )}
       </div>
-    </div>
+    </ChartCard>
   );
 }

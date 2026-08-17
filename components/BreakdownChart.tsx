@@ -10,6 +10,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+import ChartCard from "@/components/ChartCard";
+
 interface BreakdownData {
   name: string;
   value: number;
@@ -22,10 +24,8 @@ interface BreakdownChartProps {
 
 export default function BreakdownChart({ title, data }: BreakdownChartProps) {
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-      <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
-
-      <div className="mt-6 h-80">
+    <ChartCard title={title} description="Units sold">
+      <div className="h-80">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -40,6 +40,6 @@ export default function BreakdownChart({ title, data }: BreakdownChartProps) {
           </BarChart>
         </ResponsiveContainer>
       </div>
-    </div>
+    </ChartCard>
   );
 }
