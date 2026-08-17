@@ -28,5 +28,4 @@ export interface TopProduct {
     product_id: string;
     product_name: string;
     units_sold: number;
-    total_revenue: number;
 }

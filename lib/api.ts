@@ -37,3 +37,11 @@ export async function getRegionSales(): Promise<RegionSales[]> {
 export async function getCategorySales(): Promise<CategorySales[]> {
     return fetchAPI<CategorySales[]>("/analytics/sales/by-category");
 }
+
+export async function getTopProducts(
+    limit: number = 10
+): Promise<TopProduct[]> {
+    return fetchAPI<TopProduct[]>(
+        `/analytics/top?limit=${limit}`
+    );
+}

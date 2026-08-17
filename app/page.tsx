@@ -71,11 +71,13 @@
 import KPICard from "@/components/KPICard";
 import RevenueChart from "@/components/RevenueChart";
 import BreakdownChart from "@/components/BreakdownChart";
+import TopProductsTable from "@/components/TopProductsTable";
 import {
   getKPIs,
   getSalesTrend,
   getRegionSales,
   getCategorySales,
+  getTopProducts,
 } from "@/lib/api";
 
 export default async function Home() {
@@ -83,6 +85,7 @@ export default async function Home() {
   const trend = await getSalesTrend("monthly");
   const regions = await getRegionSales();
   const categories = await getCategorySales();
+  const topProducts = await getTopProducts(10);
 
   const regionChartData = regions.map((item) => ({
     name: item.region,
@@ -133,6 +136,10 @@ export default async function Home() {
             title="Units Sold by Category"
             data={categoryChartData}
           />
+        </section>
+
+        <section className="mt-8">
+          <TopProductsTable initialProducts={topProducts} />
         </section>
       </div>
     </main>
