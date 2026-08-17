@@ -5,10 +5,14 @@ import type { TopProduct } from "@/types/analytics";
 
 interface TopProductsTableProps {
   initialProducts: TopProduct[];
+  startDate?: string;
+  endDate?: string;
 }
 
 export default function TopProductsTable({
   initialProducts,
+  startDate,
+  endDate,
 }: TopProductsTableProps) {
   const [limit, setLimit] = useState(10);
   const [products, setProducts] = useState<TopProduct[]>(initialProducts);
@@ -22,10 +26,22 @@ export default function TopProductsTable({
         setLoading(true);
         setError(null);
 
-        const response = await fetch(`/api/analytics/top?limit=${limit}`);
+        const params = new URLSearchParams();
+
+        params.set("limit", String(limit));
+
+        if (startDate) {
+          params.set("start_date", startDate);
+        }
+
+        if (endDate) {
+          params.set("end_date", endDate);
+        }
+
+        const response = await fetch(`/api/analytics/top?${params.toString()}`);
 
         if (!response.ok) {
-          throw new Error("Failed to load products");
+          throw new Error("Failed to load top products");
         }
 
         const data: TopProduct[] = await response.json();
@@ -38,10 +54,8 @@ export default function TopProductsTable({
       }
     }
 
-    if (limit !== 10) {
-      loadProducts();
-    }
-  }, [limit]);
+    loadProducts();
+  }, [limit, startDate, endDate]);
 
   return (
     <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
@@ -66,12 +80,12 @@ export default function TopProductsTable({
             id="product-limit"
             type="number"
             min="1"
-            max="100"
+            max="30"
             value={limit}
             onChange={(event) => {
               const value = Number(event.target.value);
 
-              if (value >= 1 && value <= 100) {
+              if (value >= 1 && value <= 30) {
                 setLimit(value);
               }
             }}

@@ -17,9 +17,15 @@ type Granularity = "daily" | "weekly" | "monthly" | "yearly";
 
 interface RevenueChartProps {
   initialData: SalesTrend[];
+  startDate?: string;
+  endDate?: string;
 }
 
-export default function RevenueChart({ initialData }: RevenueChartProps) {
+export default function RevenueChart({
+  initialData,
+  startDate,
+  endDate,
+}: RevenueChartProps) {
   const [granularity, setGranularity] = useState<Granularity>("monthly");
 
   const [data, setData] = useState<SalesTrend[]>(initialData);
@@ -34,9 +40,19 @@ export default function RevenueChart({ initialData }: RevenueChartProps) {
         setLoading(true);
         setError(null);
 
-        const response = await fetch(
-          `/api/sales/trend?granularity=${granularity}`,
-        );
+        const params = new URLSearchParams();
+
+        params.set("granularity", granularity);
+
+        if (startDate) {
+          params.set("start_date", startDate);
+        }
+
+        if (endDate) {
+          params.set("end_date", endDate);
+        }
+
+        const response = await fetch(`/api/sales/trend?${params.toString()}`);
 
         if (!response.ok) {
           throw new Error("Failed to load sales trend");
@@ -45,16 +61,15 @@ export default function RevenueChart({ initialData }: RevenueChartProps) {
         const newData: SalesTrend[] = await response.json();
 
         setData(newData);
-
-        setData(newData);
-      } catch (error) {
+      } catch {
         setError("Failed to load sales trend.");
       } finally {
         setLoading(false);
       }
     }
+
     loadTrend();
-  }, [granularity]);
+  }, [granularity, startDate, endDate]);
 
   return (
     <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">

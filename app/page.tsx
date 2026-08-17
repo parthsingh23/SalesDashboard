@@ -72,6 +72,8 @@ import KPICard from "@/components/KPICard";
 import RevenueChart from "@/components/RevenueChart";
 import BreakdownChart from "@/components/BreakdownChart";
 import TopProductsTable from "@/components/TopProductsTable";
+import DateRangeFilter from "@/components/DateRangeFilter";
+
 import {
   getKPIs,
   getSalesTrend,
@@ -80,22 +82,31 @@ import {
   getTopProducts,
 } from "@/lib/api";
 
-export default async function Home() {
-  const kpis = await getKPIs();
-  const trend = await getSalesTrend("monthly");
-  const regions = await getRegionSales();
-  const categories = await getCategorySales();
-  const topProducts = await getTopProducts(10);
+interface HomeProps {
+  searchParams: Promise<{
+    start_date?: string;
+    end_date?: string;
+  }>;
+}
 
-  const regionChartData = regions.map((item) => ({
-    name: item.region,
-    value: item.units_sold,
-  }));
+export default async function Home({ searchParams }: HomeProps) {
+  const params = await searchParams;
 
-  const categoryChartData = categories.map((item) => ({
-    name: item.category,
-    value: item.units_sold,
-  }));
+  const startDate = params.start_date;
+  const endDate = params.end_date;
+
+  const range = {
+    start_date: startDate,
+    end_date: endDate,
+  };
+
+  const [kpis, trend, regions, categories, topProducts] = await Promise.all([
+    getKPIs(range),
+    getSalesTrend("monthly", range),
+    getRegionSales(range),
+    getCategorySales(range),
+    getTopProducts(10, range),
+  ]);
 
   return (
     <main className="min-h-screen bg-gray-50 p-8">
@@ -106,40 +117,53 @@ export default async function Home() {
 
         <p className="mt-2 text-gray-600">Overview of sales performance</p>
 
+        <DateRangeFilter />
+
         <section className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
           <KPICard
             title="Total Revenue"
             value={`₹${kpis.total_revenue.toLocaleString()}`}
           />
 
-          <KPICard
-            title="Units Sold"
-            value={kpis.total_units_sold.toLocaleString()}
-          />
+          <KPICard title="Orders" value={kpis.orders.toLocaleString()} />
 
-          <KPICard
-            title="Average Price"
-            value={`₹${kpis.average_price.toLocaleString()}`}
-          />
+          <KPICard title="AOV" value={`₹${kpis.aov.toLocaleString()}`} />
 
-          <KPICard title="Unique Products" value={kpis.unique_products} />
+          <KPICard title="Top Category" value={kpis.top_category} />
         </section>
 
         <section className="mt-8">
-          <RevenueChart initialData={trend} />
+          <RevenueChart
+            initialData={trend}
+            startDate={startDate}
+            endDate={endDate}
+          />
         </section>
 
         <section className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
-          <BreakdownChart title="Units Sold by Region" data={regionChartData} />
+          <BreakdownChart
+            title="Units Sold by Region"
+            data={regions.map((item) => ({
+              name: item.region,
+              value: item.units_sold,
+            }))}
+          />
 
           <BreakdownChart
             title="Units Sold by Category"
-            data={categoryChartData}
+            data={categories.map((item) => ({
+              name: item.category,
+              value: item.units_sold,
+            }))}
           />
         </section>
 
         <section className="mt-8">
-          <TopProductsTable initialProducts={topProducts} />
+          <TopProductsTable
+            initialProducts={topProducts}
+            startDate={startDate}
+            endDate={endDate}
+          />
         </section>
       </div>
     </main>
