@@ -10,13 +10,11 @@ export interface KPIResponse {
 export interface RegionSales {
     region: string;
     units_sold: number;
-    total_revenue: number;
 }
 
 export interface CategorySales {
     category: string;
     units_sold: number;
-    total_revenue: number;
 }
 
 export interface SalesTrend {

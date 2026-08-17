@@ -29,3 +29,11 @@ export async function getSalesTrend(
         `/analytics/sales/trend?granularity=${granularity}`
     );
 }
+
+export async function getRegionSales(): Promise<RegionSales[]> {
+    return fetchAPI<RegionSales[]>("/analytics/sales/by-region");
+}
+
+export async function getCategorySales(): Promise<CategorySales[]> {
+    return fetchAPI<CategorySales[]>("/analytics/sales/by-category");
+}

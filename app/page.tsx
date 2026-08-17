@@ -70,11 +70,29 @@
 
 import KPICard from "@/components/KPICard";
 import RevenueChart from "@/components/RevenueChart";
-import { getKPIs, getSalesTrend } from "@/lib/api";
+import BreakdownChart from "@/components/BreakdownChart";
+import {
+  getKPIs,
+  getSalesTrend,
+  getRegionSales,
+  getCategorySales,
+} from "@/lib/api";
 
 export default async function Home() {
   const kpis = await getKPIs();
   const trend = await getSalesTrend("monthly");
+  const regions = await getRegionSales();
+  const categories = await getCategorySales();
+
+  const regionChartData = regions.map((item) => ({
+    name: item.region,
+    value: item.units_sold,
+  }));
+
+  const categoryChartData = categories.map((item) => ({
+    name: item.category,
+    value: item.units_sold,
+  }));
 
   return (
     <main className="min-h-screen bg-gray-50 p-8">
@@ -106,6 +124,15 @@ export default async function Home() {
 
         <section className="mt-8">
           <RevenueChart initialData={trend} />
+        </section>
+
+        <section className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <BreakdownChart title="Units Sold by Region" data={regionChartData} />
+
+          <BreakdownChart
+            title="Units Sold by Category"
+            data={categoryChartData}
+          />
         </section>
       </div>
     </main>
