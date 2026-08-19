@@ -1,41 +1,60 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const API_URL = "https://sales-analytics-api-parth.onrender.com";
+const API_URL = process.env.API_URL;
 
 export async function GET(request: NextRequest) {
-    const granularity = request.nextUrl.searchParams.get("granularity");
-
-    if (
-        granularity !== "daily" &&
-        granularity !== "weekly" &&
-        granularity !== "monthly" &&
-        granularity !== "yearly"
-    ) {
-        return NextResponse.json(
-            { error: "Invalid granularity" },
-            { status: 400 }
-        );
+  try {
+    if (!API_URL) {
+      return NextResponse.json(
+        { error: "API_URL is not configured" },
+        { status: 500 }
+      );
     }
 
-    try {
-        const response = await fetch(
-            `${API_URL}/analytics/sales/trend?granularity=${granularity}`
-        );
+    const searchParams = request.nextUrl.searchParams;
 
-        if (!response.ok) {
-            return NextResponse.json(
-                { error: `Backend returned ${response.status}` },
-                { status: response.status }
-            );
-        }
+    const granularity =
+      searchParams.get("granularity") ?? "monthly";
 
-        const data = await response.json();
+    const startDate =
+      searchParams.get("start_date");
 
-        return NextResponse.json(data);
-    } catch {
-        return NextResponse.json(
-            { error: "Failed to contact analytics API" },
-            { status: 500 }
-        );
+    const endDate =
+      searchParams.get("end_date");
+
+    const params = new URLSearchParams();
+
+    params.set("granularity", granularity);
+
+    if (startDate) {
+      params.set("start_date", startDate);
     }
+
+    if (endDate) {
+      params.set("end_date", endDate);
+    }
+
+    const response = await fetch(
+      `${API_URL}/analytics/sales/trend?${params.toString()}`,
+      {
+        cache: "no-store",
+      }
+    );
+
+    if (!response.ok) {
+      return NextResponse.json(
+        { error: "Backend request failed" },
+        { status: response.status }
+      );
+    }
+
+    const data = await response.json();
+
+    return NextResponse.json(data);
+  } catch {
+    return NextResponse.json(
+      { error: "Failed to fetch sales trend" },
+      { status: 500 }
+    );
+  }
 }
