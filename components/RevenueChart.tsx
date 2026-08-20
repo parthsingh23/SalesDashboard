@@ -60,7 +60,6 @@ export default function RevenueChart({
         }
 
         const newData: SalesTrend[] = await response.json();
-        console.log("RevenueChart API data:", newData);
 
         setData(newData);
       } catch {
