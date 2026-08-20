@@ -145,7 +145,6 @@ export default function RevenueChart({
               />
 
               <Line type="monotone" dataKey="total_revenue" strokeWidth={2} />
-              <Line type="monotone" dataKey="orders" strokeWidth={2} />
             </LineChart>
           </ResponsiveContainer>
         )}
