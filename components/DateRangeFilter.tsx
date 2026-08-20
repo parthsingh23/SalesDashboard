@@ -11,12 +11,10 @@ export default function DateRangeFilter() {
   const searchParams = useSearchParams();
 
   const [startDate, setStartDate] = useState(
-    searchParams.get("start_date") || ""
+    searchParams.get("start_date") || "",
   );
 
-  const [endDate, setEndDate] = useState(
-    searchParams.get("end_date") || ""
-  );
+  const [endDate, setEndDate] = useState(searchParams.get("end_date") || "");
 
   const [error, setError] = useState<string | null>(null);
 
@@ -35,15 +33,13 @@ export default function DateRangeFilter() {
       endDate > MAX_DATE
     ) {
       setError(
-        "Please enter a date valid for the database. Available data is from 01-01-2022 to 31-12-2024."
+        "Please enter a date valid for the database. Available data is from 01-01-2022 to 31-12-2024.",
       );
       return;
     }
 
     if (startDate > endDate) {
-      setError(
-        "Start date cannot be later than the end date."
-      );
+      setError("Start date cannot be later than the end date.");
       return;
     }
 
@@ -66,7 +62,6 @@ export default function DateRangeFilter() {
   return (
     <div className="mt-6 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
-
         <div>
           <label
             htmlFor="start-date"
@@ -129,9 +124,7 @@ export default function DateRangeFilter() {
       </div>
 
       {error && (
-        <p className="mt-3 text-sm font-medium text-red-600">
-          {error}
-        </p>
+        <p className="mt-3 text-sm font-medium text-red-600">{error}</p>
       )}
     </div>
   );

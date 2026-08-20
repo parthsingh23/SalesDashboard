@@ -7,20 +7,17 @@ export async function GET(request: NextRequest) {
     if (!API_URL) {
       return NextResponse.json(
         { error: "API_URL is not configured" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
     const searchParams = request.nextUrl.searchParams;
 
-    const limit =
-      searchParams.get("limit") ?? "10";
+    const limit = searchParams.get("limit") ?? "10";
 
-    const startDate =
-      searchParams.get("start_date");
+    const startDate = searchParams.get("start_date");
 
-    const endDate =
-      searchParams.get("end_date");
+    const endDate = searchParams.get("end_date");
 
     const params = new URLSearchParams();
 
@@ -38,13 +35,13 @@ export async function GET(request: NextRequest) {
       `${API_URL}/analytics/top?${params.toString()}`,
       {
         cache: "no-store",
-      }
+      },
     );
 
     if (!response.ok) {
       return NextResponse.json(
         { error: "Backend request failed" },
-        { status: response.status }
+        { status: response.status },
       );
     }
 
@@ -54,7 +51,7 @@ export async function GET(request: NextRequest) {
   } catch {
     return NextResponse.json(
       { error: "Failed to fetch top products" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

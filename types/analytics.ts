@@ -28,8 +28,4 @@ export interface TopProduct {
   units_sold: number;
 }
 
-export type Granularity =
-  | "daily"
-  | "weekly"
-  | "monthly"
-  | "yearly";
+export type Granularity = "daily" | "weekly" | "monthly" | "yearly";
