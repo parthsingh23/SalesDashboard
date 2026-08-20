@@ -8,6 +8,7 @@ import type {
 } from "@/types/analytics";
 
 const API_URL = process.env.API_URL;
+// const API_URL = "http://127.0.0.1:8000";
 
 if (!API_URL) {
   throw new Error("API_URL is not configured");

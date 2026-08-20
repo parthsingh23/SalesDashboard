@@ -8,6 +8,7 @@ export interface KPIData {
 export interface SalesTrend {
   date: string;
   units_sold: number;
+  orders: number;
   total_revenue: number;
   total_delivered_qty: number;
 }

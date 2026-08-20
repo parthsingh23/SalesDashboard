@@ -60,6 +60,7 @@ export default function RevenueChart({
         }
 
         const newData: SalesTrend[] = await response.json();
+        console.log("RevenueChart API data:", newData);
 
         setData(newData);
       } catch {
@@ -118,9 +119,34 @@ export default function RevenueChart({
 
               <YAxis />
 
-              <Tooltip />
+              <Tooltip
+                content={({ active, payload }) => {
+                  if (!active || !payload || payload.length === 0) {
+                    return null;
+                  }
+
+                  const data = payload[0].payload;
+
+                  return (
+                    <div className="rounded-lg border bg-white p-3 shadow-md">
+                      <p className="mb-2 text-sm text-red-500">{data.date}</p>
+
+                      <p className="text-sm text-red-500">
+                        <span className="font-medium">Revenue:</span> ₹
+                        {Number(data.total_revenue).toFixed(2)}
+                      </p>
+
+                      <p className="text-sm text-red-500">
+                        <span className="font-medium">Orders:</span>{" "}
+                        {data.orders}
+                      </p>
+                    </div>
+                  );
+                }}
+              />
 
               <Line type="monotone" dataKey="total_revenue" strokeWidth={2} />
+              <Line type="monotone" dataKey="orders" strokeWidth={2} />
             </LineChart>
           </ResponsiveContainer>
         )}
