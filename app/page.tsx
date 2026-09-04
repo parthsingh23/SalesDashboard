@@ -1,8 +1,13 @@
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+
 import KPICard from "@/components/KPICard";
 import RevenueChart from "@/components/RevenueChart";
 import BreakdownChart from "@/components/BreakdownChart";
 import TopProductsTable from "@/components/TopProductsTable";
 import DateRangeFilter from "@/components/DateRangeFilter";
+import LogoutButton from "@/components/LogoutButton";
+import DashboardNav from "@/components/dashboard/DashboardNav";
 
 import {
   getKPIs,
@@ -20,6 +25,22 @@ interface HomeProps {
 }
 
 export default async function Home({ searchParams }: HomeProps) {
+  const session = await getServerSession(authOptions);
+  const accessToken = session?.accessToken;
+
+  if (!accessToken) {
+    return (
+      <main className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold">Unauthorized</h1>
+          <p className="mt-2 text-gray-600">
+            Please log in to access the dashboard.
+          </p>
+        </div>
+      </main>
+    );
+  }
+
   const params = await searchParams;
 
   const startDate = params.start_date;
@@ -31,21 +52,29 @@ export default async function Home({ searchParams }: HomeProps) {
   };
 
   const [kpis, trend, regions, categories, topProducts] = await Promise.all([
-    getKPIs(range),
-    getSalesTrend("monthly", range),
-    getRegionSales(range),
-    getCategorySales(range),
-    getTopProducts(10, range),
+    getKPIs(range, accessToken),
+    getSalesTrend("monthly", range, accessToken),
+    getRegionSales(range, accessToken),
+    getCategorySales(range, accessToken),
+    getTopProducts(10, range, accessToken),
   ]);
 
   return (
     <main className="min-h-screen bg-gray-50 p-8">
       <div className="mx-auto max-w-7xl">
-        <h1 className="text-3xl font-bold text-gray-900">
-          Sales Analytics Dashboard
-        </h1>
+        <DashboardNav />
 
-        <p className="mt-2 text-gray-600">Overview of sales performance</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Sales Analytics Dashboard
+            </h1>
+
+            <p className="mt-2 text-gray-600">Overview of sales performance</p>
+          </div>
+
+          <LogoutButton />
+        </div>
 
         <DateRangeFilter />
 
