@@ -17,6 +17,7 @@ interface ProductsPageProps {
     search?: string;
   }>;
 }
+
 export default async function ProductsPage({
   searchParams,
 }: ProductsPageProps) {
@@ -31,6 +32,7 @@ export default async function ProductsPage({
   const page = Math.max(1, Number(params.page) || 1);
 
   const pageSize = Math.min(500, Math.max(25, Number(params.pageSize) || 100));
+
   const search = params.search?.trim() || "";
 
   const offset = (page - 1) * pageSize;
@@ -64,18 +66,7 @@ export default async function ProductsPage({
 
         <ProductManagement isAdmin={isAdmin} />
 
-        <ProductManagement isAdmin={isAdmin} />
-
         <ProductSearch />
-
-        <ProductTable products={products} isAdmin={isAdmin} />
-
-        <ProductPagination
-          page={page}
-          pageSize={pageSize}
-          totalPages={totalPages}
-          total={total}
-        />
 
         <ProductTable products={products} isAdmin={isAdmin} />
 

@@ -18,7 +18,7 @@ export default function ProductManagement({ isAdmin }: ProductManagementProps) {
   }
 
   return (
-    <>
+    <div className="mb-6">
       {showForm ? (
         <ProductForm
           mode="create"
@@ -37,6 +37,6 @@ export default function ProductManagement({ isAdmin }: ProductManagementProps) {
           Add Product
         </button>
       )}
-    </>
+    </div>
   );
 }
