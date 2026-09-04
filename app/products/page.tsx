@@ -5,6 +5,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getProducts } from "@/lib/api";
 import ProductTable from "@/components/dashboard/ProductTable";
 import ProductPagination from "@/components/dashboard/ProductPagination";
+import ProductManagement from "@/components/dashboard/ProductManagement";
 
 interface ProductsPageProps {
   searchParams: Promise<{
@@ -55,14 +56,7 @@ export default async function ProductsPage({
             </p>
           </div>
 
-          {isAdmin && (
-            <button
-              type="button"
-              className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white"
-            >
-              Add Product
-            </button>
-          )}
+          <ProductManagement isAdmin={isAdmin} />
         </div>
 
         <ProductTable products={products} isAdmin={isAdmin} />

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Product } from "@/types/product";
 
 interface ProductTableProps {
@@ -77,12 +78,12 @@ export default function ProductTable({ products, isAdmin }: ProductTableProps) {
 
               {isAdmin && (
                 <td className="px-4 py-3 text-right">
-                  <button
-                    type="button"
-                    className="mr-2 rounded-md border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-100"
+                  <Link
+                    href={`/products/${product.id}/edit`}
+                    className="mr-2 inline-block rounded-md border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-100"
                   >
                     Edit
-                  </button>
+                  </Link>
 
                   <button
                     type="button"
