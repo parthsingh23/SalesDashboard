@@ -7,7 +7,6 @@ import BreakdownChart from "@/components/BreakdownChart";
 import TopProductsTable from "@/components/TopProductsTable";
 import DateRangeFilter from "@/components/DateRangeFilter";
 import LogoutButton from "@/components/LogoutButton";
-import AdminTestButton from "@/components/AdminTestButton";
 
 import {
   getKPIs,
@@ -73,8 +72,6 @@ export default async function Home({ searchParams }: HomeProps) {
 
           <LogoutButton />
         </div>
-
-        <AdminTestButton role={session?.user?.role} />
 
         <DateRangeFilter />
 
