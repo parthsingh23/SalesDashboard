@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Product } from "@/types/product";
+import DeleteProductButton from "@/components/dashboard/DeleteProductButton";
 
 interface ProductTableProps {
   products: Product[];
@@ -85,12 +86,7 @@ export default function ProductTable({ products, isAdmin }: ProductTableProps) {
                     Edit
                   </Link>
 
-                  <button
-                    type="button"
-                    className="rounded-md border border-red-200 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50"
-                  >
-                    Delete
-                  </button>
+                  <DeleteProductButton productId={product.id} />
                 </td>
               )}
             </tr>
