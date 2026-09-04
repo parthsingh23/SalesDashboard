@@ -8,14 +8,15 @@ import ProductManagement from "@/components/dashboard/ProductManagement";
 import ProductTable from "@/components/dashboard/ProductTable";
 import ProductPagination from "@/components/dashboard/ProductPagination";
 import DashboardNav from "@/components/dashboard/DashboardNav";
+import ProductSearch from "@/components/dashboard/ProductSearch";
 
 interface ProductsPageProps {
   searchParams: Promise<{
     page?: string;
     pageSize?: string;
+    search?: string;
   }>;
 }
-
 export default async function ProductsPage({
   searchParams,
 }: ProductsPageProps) {
@@ -29,17 +30,16 @@ export default async function ProductsPage({
 
   const page = Math.max(1, Number(params.page) || 1);
 
-  const pageSize = Math.min(
-    500,
-    Math.max(25, Number(params.pageSize) || 100)
-  );
+  const pageSize = Math.min(500, Math.max(25, Number(params.pageSize) || 100));
+  const search = params.search?.trim() || "";
 
   const offset = (page - 1) * pageSize;
 
   const result = await getProducts(
     offset,
     pageSize,
-    session.accessToken
+    session.accessToken,
+    search,
   );
 
   const products = result.items;
@@ -59,17 +59,25 @@ export default async function ProductsPage({
             Product Management
           </h1>
 
-          <p className="mt-2 text-gray-600">
-            View and manage products.
-          </p>
+          <p className="mt-2 text-gray-600">View and manage products.</p>
         </div>
 
         <ProductManagement isAdmin={isAdmin} />
 
-        <ProductTable
-          products={products}
-          isAdmin={isAdmin}
+        <ProductManagement isAdmin={isAdmin} />
+
+        <ProductSearch />
+
+        <ProductTable products={products} isAdmin={isAdmin} />
+
+        <ProductPagination
+          page={page}
+          pageSize={pageSize}
+          totalPages={totalPages}
+          total={total}
         />
+
+        <ProductTable products={products} isAdmin={isAdmin} />
 
         <ProductPagination
           page={page}

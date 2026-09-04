@@ -115,13 +115,15 @@ export async function getTopProducts(
 }
 
 export async function getProducts(
-  offset: number = 0,
-  limit: number = 100,
+  offset = 0,
+  limit = 100,
   accessToken?: string,
+  search?: string,
 ): Promise<ProductListResponse> {
   const query = buildQuery({
     offset,
     limit,
+    search: search || undefined,
   });
 
   return fetchAPI<ProductListResponse>(`/products/?${query}`, accessToken);
