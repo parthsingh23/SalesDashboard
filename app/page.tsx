@@ -1,3 +1,6 @@
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+
 import KPICard from "@/components/KPICard";
 import RevenueChart from "@/components/RevenueChart";
 import BreakdownChart from "@/components/BreakdownChart";
@@ -20,6 +23,22 @@ interface HomeProps {
 }
 
 export default async function Home({ searchParams }: HomeProps) {
+  const session = await getServerSession(authOptions);
+  const accessToken = session?.accessToken;
+
+  if (!accessToken) {
+    return (
+      <main className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold">Unauthorized</h1>
+          <p className="mt-2 text-gray-600">
+            Please log in to access the dashboard.
+          </p>
+        </div>
+      </main>
+    );
+  }
+
   const params = await searchParams;
 
   const startDate = params.start_date;
@@ -31,11 +50,11 @@ export default async function Home({ searchParams }: HomeProps) {
   };
 
   const [kpis, trend, regions, categories, topProducts] = await Promise.all([
-    getKPIs(range),
-    getSalesTrend("monthly", range),
-    getRegionSales(range),
-    getCategorySales(range),
-    getTopProducts(10, range),
+    getKPIs(range, accessToken),
+    getSalesTrend("monthly", range, accessToken),
+    getRegionSales(range, accessToken),
+    getCategorySales(range, accessToken),
+    getTopProducts(10, range, accessToken),
   ]);
 
   return (

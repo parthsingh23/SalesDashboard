@@ -1,8 +1,16 @@
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+
 import { NextRequest, NextResponse } from "next/server";
 
 const API_URL = process.env.API_URL;
 
 export async function GET(request: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session?.accessToken) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     if (!API_URL) {
       return NextResponse.json(
@@ -35,6 +43,9 @@ export async function GET(request: NextRequest) {
       `${API_URL}/analytics/sales/trend?${params.toString()}`,
       {
         cache: "no-store",
+        headers: {
+          Authorization: `Bearer ${session.accessToken}`,
+        },
       },
     );
 
