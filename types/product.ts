@@ -34,3 +34,8 @@ export interface ProductUpdate {
   mrp?: number;
   sell_price?: number;
 }
+
+export interface ProductListResponse {
+  items: Product[];
+  total: number;
+}

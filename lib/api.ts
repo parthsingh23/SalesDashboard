@@ -11,6 +11,7 @@ import type {
   Product,
   ProductCreate,
   ProductUpdate,
+  ProductListResponse,
 } from "@/types/product";
 
 const API_URL = process.env.API_URL;
@@ -115,28 +116,22 @@ export async function getTopProducts(
 
 export async function getProducts(
   offset: number = 0,
-  limit: number = 50,
+  limit: number = 100,
   accessToken?: string,
-): Promise<Product[]> {
+): Promise<ProductListResponse> {
   const query = buildQuery({
     offset,
     limit,
   });
 
-  return fetchAPI<Product[]>(
-    `/products/?${query}`,
-    accessToken,
-  );
+  return fetchAPI<ProductListResponse>(`/products/?${query}`, accessToken);
 }
 
 export async function getProduct(
   productId: number,
   accessToken?: string,
 ): Promise<Product> {
-  return fetchAPI<Product>(
-    `/products/${productId}`,
-    accessToken,
-  );
+  return fetchAPI<Product>(`/products/${productId}`, accessToken);
 }
 
 export async function createProduct(
