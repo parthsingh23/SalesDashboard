@@ -6,6 +6,7 @@ import RevenueChart from "@/components/RevenueChart";
 import BreakdownChart from "@/components/BreakdownChart";
 import TopProductsTable from "@/components/TopProductsTable";
 import DateRangeFilter from "@/components/DateRangeFilter";
+import LogoutButton from "@/components/LogoutButton";
 
 import {
   getKPIs,
@@ -60,11 +61,17 @@ export default async function Home({ searchParams }: HomeProps) {
   return (
     <main className="min-h-screen bg-gray-50 p-8">
       <div className="mx-auto max-w-7xl">
-        <h1 className="text-3xl font-bold text-gray-900">
-          Sales Analytics Dashboard
-        </h1>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Sales Analytics Dashboard
+            </h1>
 
-        <p className="mt-2 text-gray-600">Overview of sales performance</p>
+            <p className="mt-2 text-gray-600">Overview of sales performance</p>
+          </div>
+
+          <LogoutButton />
+        </div>
 
         <DateRangeFilter />
 
