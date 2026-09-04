@@ -9,6 +9,7 @@ import ProductTable from "@/components/dashboard/ProductTable";
 import ProductPagination from "@/components/dashboard/ProductPagination";
 import DashboardNav from "@/components/dashboard/DashboardNav";
 import ProductSearch from "@/components/dashboard/ProductSearch";
+import LogoutButton from "@/components/LogoutButton";
 
 interface ProductsPageProps {
   searchParams: Promise<{

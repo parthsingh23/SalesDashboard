@@ -6,7 +6,6 @@ import RevenueChart from "@/components/RevenueChart";
 import BreakdownChart from "@/components/BreakdownChart";
 import TopProductsTable from "@/components/TopProductsTable";
 import DateRangeFilter from "@/components/DateRangeFilter";
-import LogoutButton from "@/components/LogoutButton";
 import DashboardNav from "@/components/dashboard/DashboardNav";
 
 import {
@@ -73,7 +72,6 @@ export default async function Home({ searchParams }: HomeProps) {
             <p className="mt-2 text-gray-600">Overview of sales performance</p>
           </div>
 
-          <LogoutButton />
         </div>
 
         <DateRangeFilter />
