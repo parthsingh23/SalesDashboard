@@ -7,6 +7,12 @@ import type {
   Granularity,
 } from "@/types/analytics";
 
+import type {
+  Product,
+  ProductCreate,
+  ProductUpdate,
+} from "@/types/product";
+
 const API_URL = process.env.API_URL;
 // const API_URL = "http://127.0.0.1:8000";
 
@@ -105,4 +111,89 @@ export async function getTopProducts(
   });
 
   return fetchAPI<TopProduct[]>(`/analytics/top?${query}`, accessToken);
+}
+
+export async function getProducts(
+  offset: number = 0,
+  limit: number = 50,
+  accessToken?: string,
+): Promise<Product[]> {
+  const query = buildQuery({
+    offset,
+    limit,
+  });
+
+  return fetchAPI<Product[]>(
+    `/products/?${query}`,
+    accessToken,
+  );
+}
+
+export async function getProduct(
+  productId: number,
+  accessToken?: string,
+): Promise<Product> {
+  return fetchAPI<Product>(
+    `/products/${productId}`,
+    accessToken,
+  );
+}
+
+export async function createProduct(
+  product: ProductCreate,
+  accessToken: string,
+): Promise<Product> {
+  const response = await fetch(`${API_URL}/products/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify(product),
+  });
+
+  if (!response.ok) {
+    throw new Error(`API request failed: ${response.status}`);
+  }
+
+  return response.json();
+}
+
+export async function updateProduct(
+  productId: number,
+  product: ProductUpdate,
+  accessToken: string,
+): Promise<Product> {
+  const response = await fetch(`${API_URL}/products/${productId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify(product),
+  });
+
+  if (!response.ok) {
+    throw new Error(`API request failed: ${response.status}`);
+  }
+
+  return response.json();
+}
+
+export async function deleteProduct(
+  productId: number,
+  accessToken: string,
+): Promise<{ message: string }> {
+  const response = await fetch(`${API_URL}/products/${productId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`API request failed: ${response.status}`);
+  }
+
+  return response.json();
 }
