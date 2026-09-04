@@ -7,6 +7,7 @@ import BreakdownChart from "@/components/BreakdownChart";
 import TopProductsTable from "@/components/TopProductsTable";
 import DateRangeFilter from "@/components/DateRangeFilter";
 import LogoutButton from "@/components/LogoutButton";
+import DashboardNav from "@/components/dashboard/DashboardNav";
 
 import {
   getKPIs,
@@ -61,6 +62,8 @@ export default async function Home({ searchParams }: HomeProps) {
   return (
     <main className="min-h-screen bg-gray-50 p-8">
       <div className="mx-auto max-w-7xl">
+        <DashboardNav />
+
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">

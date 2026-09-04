@@ -1,11 +1,13 @@
-import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getProducts } from "@/lib/api";
+
+import ProductManagement from "@/components/dashboard/ProductManagement";
 import ProductTable from "@/components/dashboard/ProductTable";
 import ProductPagination from "@/components/dashboard/ProductPagination";
-import ProductManagement from "@/components/dashboard/ProductManagement";
+import DashboardNav from "@/components/dashboard/DashboardNav";
 
 interface ProductsPageProps {
   searchParams: Promise<{
@@ -19,11 +21,7 @@ export default async function ProductsPage({
 }: ProductsPageProps) {
   const session = await getServerSession(authOptions);
 
-  if (!session) {
-    redirect("/login");
-  }
-
-  if (!session.accessToken) {
+  if (!session?.accessToken) {
     redirect("/login");
   }
 
@@ -31,11 +29,18 @@ export default async function ProductsPage({
 
   const page = Math.max(1, Number(params.page) || 1);
 
-  const pageSize = Math.min(500, Math.max(25, Number(params.pageSize) || 100));
+  const pageSize = Math.min(
+    500,
+    Math.max(25, Number(params.pageSize) || 100)
+  );
 
   const offset = (page - 1) * pageSize;
 
-  const result = await getProducts(offset, pageSize, session.accessToken);
+  const result = await getProducts(
+    offset,
+    pageSize,
+    session.accessToken
+  );
 
   const products = result.items;
   const total = result.total;
@@ -47,25 +52,30 @@ export default async function ProductsPage({
   return (
     <main className="min-h-screen bg-gray-50 px-6 py-8">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-6 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-semibold text-gray-900">Products</h1>
+        <DashboardNav />
 
-            <p className="mt-1 text-sm text-gray-600">
-              Manage and view product information.
-            </p>
-          </div>
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold text-gray-900">
+            Product Management
+          </h1>
 
-          <ProductManagement isAdmin={isAdmin} />
+          <p className="mt-2 text-gray-600">
+            View and manage products.
+          </p>
         </div>
 
-        <ProductTable products={products} isAdmin={isAdmin} />
+        <ProductManagement isAdmin={isAdmin} />
+
+        <ProductTable
+          products={products}
+          isAdmin={isAdmin}
+        />
 
         <ProductPagination
           page={page}
           pageSize={pageSize}
-          total={total}
           totalPages={totalPages}
+          total={total}
         />
       </div>
     </main>

@@ -3,10 +3,14 @@ import { getServerSession } from "next-auth";
 
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getProduct } from "@/lib/api";
+
 import ProductForm from "@/components/dashboard/ProductForm";
+import DashboardNav from "@/components/dashboard/DashboardNav";
 
 interface EditProductPageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{
+    id: string;
+  }>;
 }
 
 export default async function EditProductPage({
@@ -23,6 +27,7 @@ export default async function EditProductPage({
   }
 
   const { id } = await params;
+
   const productId = Number(id);
 
   if (!Number.isInteger(productId)) {
@@ -32,7 +37,10 @@ export default async function EditProductPage({
   let product;
 
   try {
-    product = await getProduct(productId, session.accessToken);
+    product = await getProduct(
+      productId,
+      session.accessToken
+    );
   } catch {
     notFound();
   }
@@ -40,7 +48,12 @@ export default async function EditProductPage({
   return (
     <main className="min-h-screen bg-gray-50 px-6 py-8">
       <div className="mx-auto max-w-3xl">
-        <ProductForm mode="edit" product={product} />
+        <DashboardNav />
+
+        <ProductForm
+          mode="edit"
+          product={product}
+        />
       </div>
     </main>
   );
