@@ -26,6 +26,16 @@ interface DateRange {
   end_date?: string;
 }
 
+export class APIError extends Error {
+  status: number;
+
+  constructor(status: number) {
+    super(`API request failed: ${status}`);
+    this.name = "APIError";
+    this.status = status;
+  }
+}
+
 function buildQuery(params: Record<string, string | number | undefined>) {
   const searchParams = new URLSearchParams();
 
@@ -49,7 +59,7 @@ async function fetchAPI<T>(endpoint: string, accessToken?: string): Promise<T> {
   });
 
   if (!response.ok) {
-    throw new Error(`API request failed: ${response.status}`);
+    throw new APIError(response.status);
   }
 
   return response.json();
@@ -150,7 +160,7 @@ export async function createProduct(
   });
 
   if (!response.ok) {
-    throw new Error(`API request failed: ${response.status}`);
+    throw new APIError(response.status);
   }
 
   return response.json();
@@ -171,7 +181,7 @@ export async function updateProduct(
   });
 
   if (!response.ok) {
-    throw new Error(`API request failed: ${response.status}`);
+    throw new APIError(response.status);
   }
 
   return response.json();
@@ -189,7 +199,7 @@ export async function deleteProduct(
   });
 
   if (!response.ok) {
-    throw new Error(`API request failed: ${response.status}`);
+    throw new APIError(response.status);
   }
 
   return response.json();

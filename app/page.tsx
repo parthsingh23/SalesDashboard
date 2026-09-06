@@ -1,5 +1,6 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 
 import KPICard from "@/components/KPICard";
 import RevenueChart from "@/components/RevenueChart";
@@ -9,6 +10,7 @@ import DateRangeFilter from "@/components/DateRangeFilter";
 import DashboardNav from "@/components/dashboard/DashboardNav";
 
 import {
+  APIError,
   getKPIs,
   getSalesTrend,
   getRegionSales,
@@ -28,16 +30,7 @@ export default async function Home({ searchParams }: HomeProps) {
   const accessToken = session?.accessToken;
 
   if (!accessToken) {
-    return (
-      <main className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold">Unauthorized</h1>
-          <p className="mt-2 text-gray-600">
-            Please log in to access the dashboard.
-          </p>
-        </div>
-      </main>
-    );
+    redirect("/login");
   }
 
   const params = await searchParams;
@@ -50,13 +43,27 @@ export default async function Home({ searchParams }: HomeProps) {
     end_date: endDate,
   };
 
-  const [kpis, trend, regions, categories, topProducts] = await Promise.all([
-    getKPIs(range, accessToken),
-    getSalesTrend("monthly", range, accessToken),
-    getRegionSales(range, accessToken),
-    getCategorySales(range, accessToken),
-    getTopProducts(10, range, accessToken),
-  ]);
+  let kpis;
+  let trend;
+  let regions;
+  let categories;
+  let topProducts;
+
+  try {
+    [kpis, trend, regions, categories, topProducts] = await Promise.all([
+      getKPIs(range, accessToken),
+      getSalesTrend("monthly", range, accessToken),
+      getRegionSales(range, accessToken),
+      getCategorySales(range, accessToken),
+      getTopProducts(10, range, accessToken),
+    ]);
+  } catch (error) {
+    if (error instanceof APIError && error.status === 401) {
+      redirect("/login");
+    }
+
+    throw error;
+  }
 
   return (
     <main className="min-h-screen bg-gray-50 p-8">
@@ -71,7 +78,6 @@ export default async function Home({ searchParams }: HomeProps) {
 
             <p className="mt-2 text-gray-600">Overview of sales performance</p>
           </div>
-
         </div>
 
         <DateRangeFilter />

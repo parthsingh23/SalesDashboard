@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { getProducts } from "@/lib/api";
+import { APIError, getProducts } from "@/lib/api";
 
 import ProductManagement from "@/components/dashboard/ProductManagement";
 import ProductTable from "@/components/dashboard/ProductTable";
@@ -38,12 +38,17 @@ export default async function ProductsPage({
 
   const offset = (page - 1) * pageSize;
 
-  const result = await getProducts(
-    offset,
-    pageSize,
-    session.accessToken,
-    search,
-  );
+  let result;
+
+  try {
+    result = await getProducts(offset, pageSize, session.accessToken, search);
+  } catch (error) {
+    if (error instanceof APIError && error.status === 401) {
+      redirect("/login");
+    }
+
+    throw error;
+  }
 
   const products = result.items;
   const total = result.total;
