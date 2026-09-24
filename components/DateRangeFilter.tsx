@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
+import { trackEvent } from "@/lib/analytics";
+
 const MIN_DATE = "2022-01-01";
 const MAX_DATE = "2024-12-31";
 
@@ -48,6 +50,12 @@ export default function DateRangeFilter() {
     params.set("start_date", startDate);
     params.set("end_date", endDate);
 
+    trackEvent("filter_changed", {
+      filter_type: "date_range",
+      start_date: startDate,
+      end_date: endDate,
+    });
+
     router.push(`/?${params.toString()}`);
   }
 
@@ -55,6 +63,11 @@ export default function DateRangeFilter() {
     setStartDate("");
     setEndDate("");
     setError(null);
+
+    trackEvent("filter_changed", {
+      filter_type: "date_range",
+      action: "clear",
+    });
 
     router.push("/");
   }
