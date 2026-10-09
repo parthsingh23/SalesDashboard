@@ -144,7 +144,7 @@ export default function TopProductsTable({
           <DataTable
             headers={[
               "SL NO.",
-              <button>Product ID</button>,
+              <button key="product-id">Product ID</button>,
               <div key="units-sold" className="text-right">
                 <button
                   type="button"

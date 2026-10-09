@@ -8,6 +8,7 @@ import BreakdownChart from "@/components/BreakdownChart";
 import TopProductsTable from "@/components/TopProductsTable";
 import DateRangeFilter from "@/components/DateRangeFilter";
 import DashboardNav from "@/components/dashboard/DashboardNav";
+import DashboardAnalytics from "@/components/analytics/DashboardAnalytics";
 
 import {
   APIError,
@@ -67,6 +68,8 @@ export default async function Home({ searchParams }: HomeProps) {
 
   return (
     <main className="min-h-screen bg-gray-50 p-8">
+      <DashboardAnalytics />
+
       <div className="mx-auto max-w-7xl">
         <DashboardNav />
 
