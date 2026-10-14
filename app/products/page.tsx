@@ -31,7 +31,7 @@ export default async function ProductsPage({
 
   const page = Math.max(1, Number(params.page) || 1);
 
-  const pageSize = Math.min(500, Math.max(25, Number(params.pageSize) || 100));
+  const pageSize = Math.min(500, Math.max(25, Number(params.pageSize) || 25));
 
   const search = params.search?.trim() || "";
 
