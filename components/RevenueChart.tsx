@@ -91,10 +91,10 @@ export default function RevenueChart({
                 key={option}
                 onClick={() => setGranularity(option)}
                 aria-pressed={granularity === option}
-                className={`rounded-lg px-3 py-2 text-sm font-medium capitalize transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 ${
+                className={`rounded-lg px-3 py-2 text-sm font-medium capitalize transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
                   granularity === option
-                    ? "bg-indigo-600 text-white shadow-sm"
-                    : "bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700"
+                    ? "bg-blue-600 text-white shadow-sm"
+                    : "bg-slate-100 text-slate-600 hover:bg-blue-50 hover:text-blue-700"
                 }`}
               >
                 {option}
@@ -179,12 +179,12 @@ export default function RevenueChart({
                         {point.date}
                       </p>
 
-                      <p className="text-sm font-semibold text-indigo-700">
+                      <p className="text-sm font-semibold text-blue-700">
                         Revenue:{" "}
                         {revenueFormat.format(Number(point.total_revenue))}
                       </p>
 
-                      <p className="text-sm font-semibold text-indigo-700">
+                      <p className="text-sm font-semibold text-blue-700">
                         Orders: {Number(point.orders).toLocaleString("en-IN")}
                       </p>
                     </div>
@@ -196,17 +196,17 @@ export default function RevenueChart({
                 type="monotone"
                 dataKey="total_revenue"
                 name="Revenue"
-                stroke="#4f46e5"
+                stroke="#2563eb"
                 strokeWidth={2.5}
                 dot={{
                   r: 3,
                   fill: "#ffffff",
-                  stroke: "#4f46e5",
+                  stroke: "#2563eb",
                   strokeWidth: 2,
                 }}
                 activeDot={{
                   r: 5,
-                  fill: "#4f46e5",
+                  fill: "#2563eb",
                   stroke: "#ffffff",
                   strokeWidth: 2,
                 }}

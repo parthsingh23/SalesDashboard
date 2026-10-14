@@ -7,9 +7,7 @@ export default function ProductSearch() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [search, setSearch] = useState(
-    searchParams.get("search") || ""
-  );
+  const [search, setSearch] = useState(searchParams.get("search") || "");
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -41,19 +39,19 @@ export default function ProductSearch() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="mb-6 flex gap-2"
+      className="mb-6 flex flex-wrap items-center gap-2"
     >
       <input
         type="text"
         value={search}
         onChange={(event) => setSearch(event.target.value)}
         placeholder="Search products..."
-        className="flex-1 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 placeholder:text-black-500 outline-none focus:border-gray-500"
+        className="min-h-11 min-w-0 flex-1 basis-48 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
       />
 
       <button
         type="submit"
-        className="rounded-md bg-black px-5 py-2 text-sm font-medium text-white hover:bg-gray-800"
+        className="min-h-11 rounded-lg bg-blue-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
       >
         Search
       </button>
@@ -62,7 +60,7 @@ export default function ProductSearch() {
         <button
           type="button"
           onClick={handleClear}
-          className="rounded-md border border-gray-300 bg-white px-5 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          className="min-h-11 rounded-lg border border-slate-300 bg-white px-5 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
         >
           Clear
         </button>

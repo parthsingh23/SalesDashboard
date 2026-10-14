@@ -32,9 +32,13 @@ const compactFormat = new Intl.NumberFormat("en-IN", {
 });
 
 export default function BreakdownChart({ title, data }: BreakdownChartProps) {
+  const chartColor = title === "Units Sold by Region" ? "#0d9488" : "#8b5cf6";
+
+  const activeChartColor =
+    title === "Units Sold by Region" ? "#0f766e" : "#7c3aed";
   return (
     <ChartCard title={title} description="Units sold">
-      <div className="h-72 min-w-0 sm:h-80">
+      <div className="h-72 min-w-0  sm:h-80">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={data}
@@ -65,7 +69,7 @@ export default function BreakdownChart({ title, data }: BreakdownChartProps) {
             />
 
             <Tooltip
-              cursor={{ fill: "#eef2ff" }}
+              cursor={{ fill: `${chartColor}14` }}
               formatter={(value) => [
                 numberFormat.format(Number(value)),
                 "Units sold",
@@ -82,17 +86,18 @@ export default function BreakdownChart({ title, data }: BreakdownChartProps) {
                 marginBottom: 4,
               }}
               itemStyle={{
-                color: "#4f46e5",
+                color: chartColor,
                 fontSize: 13,
+                fontWeight: 700
               }}
             />
 
             <Bar
               dataKey="value"
-              fill="#6366f1"
+              fill={chartColor}
               radius={[6, 6, 0, 0]}
               maxBarSize={64}
-              activeBar={{ fill: "#4338ca" }}
+              activeBar={{ fill: activeChartColor }}
             />
           </BarChart>
         </ResponsiveContainer>
