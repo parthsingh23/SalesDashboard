@@ -22,6 +22,17 @@ interface RevenueChartProps {
   endDate?: string;
 }
 
+const revenueFormat = new Intl.NumberFormat("en-IN", {
+  style: "currency",
+  currency: "INR",
+  maximumFractionDigits: 2,
+});
+
+const compactFormat = new Intl.NumberFormat("en-IN", {
+  notation: "compact",
+  maximumFractionDigits: 1,
+});
+
 export default function RevenueChart({
   initialData,
   startDate,
@@ -30,9 +41,7 @@ export default function RevenueChart({
   const [granularity, setGranularity] = useState<Granularity>("monthly");
 
   const [data, setData] = useState<SalesTrend[]>(initialData);
-
   const [loading, setLoading] = useState(false);
-
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -42,7 +51,6 @@ export default function RevenueChart({
         setError(null);
 
         const params = new URLSearchParams();
-
         params.set("granularity", granularity);
 
         if (startDate) {
@@ -60,7 +68,6 @@ export default function RevenueChart({
         }
 
         const newData: SalesTrend[] = await response.json();
-
         setData(newData);
       } catch {
         setError("Failed to load sales trend.");
@@ -83,10 +90,11 @@ export default function RevenueChart({
               <button
                 key={option}
                 onClick={() => setGranularity(option)}
-                className={`rounded-md px-3 py-2 text-sm font-medium ${
+                aria-pressed={granularity === option}
+                className={`rounded-lg px-3 py-2 text-sm font-medium capitalize transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 ${
                   granularity === option
-                    ? "bg-black text-white"
-                    : "bg-gray-100 text-gray-700"
+                    ? "bg-indigo-600 text-white shadow-sm"
+                    : "bg-slate-100 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700"
                 }`}
               >
                 {option}
@@ -96,27 +104,66 @@ export default function RevenueChart({
         </div>
       }
     >
-      <div className="h-80">
+      <div className="h-72 min-w-0 sm:h-80">
         {loading && (
-          <div className="flex h-full items-center justify-center text-gray-500">
+          <div
+            role="status"
+            className="flex h-full items-center justify-center text-sm text-slate-500"
+          >
             Loading chart...
           </div>
         )}
 
         {error && (
-          <div className="flex h-full items-center justify-center text-red-600">
+          <div
+            role="alert"
+            className="flex h-full items-center justify-center text-sm text-red-600"
+          >
             {error}
           </div>
         )}
 
         {!loading && !error && (
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={data}>
-              <CartesianGrid strokeDasharray="3 3" />
+            <LineChart
+              data={data}
+              margin={{ top: 8, right: 12, left: 4, bottom: 8 }}
+            >
+              <CartesianGrid
+                stroke="#e2e8f0"
+                strokeDasharray="4 4"
+                vertical={false}
+              />
 
-              <XAxis dataKey="date" />
+              <XAxis
+                dataKey="date"
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: "#64748b", fontSize: 11 }}
+                tickMargin={10}
+                minTickGap={24}
+                tickFormatter={(value: string) => {
+                  const date = new Date(value);
 
-              <YAxis />
+                  if (Number.isNaN(date.getTime())) {
+                    return value;
+                  }
+
+                  return date.toLocaleDateString("en-IN", {
+                    month: "short",
+                    year: "2-digit",
+                    timeZone: "UTC",
+                  });
+                }}
+              />
+
+              <YAxis
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: "#64748b", fontSize: 11 }}
+                tickFormatter={(value: number) => compactFormat.format(value)}
+                width={54}
+              />
 
               <Tooltip
                 content={({ active, payload }) => {
@@ -124,27 +171,47 @@ export default function RevenueChart({
                     return null;
                   }
 
-                  const data = payload[0].payload;
+                  const point = payload[0].payload as SalesTrend;
 
                   return (
-                    <div className="rounded-lg border bg-white p-3 shadow-md">
-                      <p className="mb-2 text-sm text-red-500">{data.date}</p>
-
-                      <p className="text-sm text-red-500">
-                        <span className="font-medium">Revenue:</span> ₹
-                        {Number(data.total_revenue).toFixed(2)}
+                    <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-lg">
+                      <p className="mb-2 text-xs font-semibold text-slate-500">
+                        {point.date}
                       </p>
 
-                      <p className="text-sm text-red-500">
-                        <span className="font-medium">Orders:</span>{" "}
-                        {data.orders}
+                      <p className="text-sm font-semibold text-indigo-700">
+                        Revenue:{" "}
+                        {revenueFormat.format(Number(point.total_revenue))}
+                      </p>
+
+                      <p className="text-sm font-semibold text-indigo-700">
+                        Orders: {Number(point.orders).toLocaleString("en-IN")}
                       </p>
                     </div>
                   );
                 }}
               />
 
-              <Line type="monotone" dataKey="total_revenue" strokeWidth={2} />
+              <Line
+                type="monotone"
+                dataKey="total_revenue"
+                name="Revenue"
+                stroke="#4f46e5"
+                strokeWidth={2.5}
+                dot={{
+                  r: 3,
+                  fill: "#ffffff",
+                  stroke: "#4f46e5",
+                  strokeWidth: 2,
+                }}
+                activeDot={{
+                  r: 5,
+                  fill: "#4f46e5",
+                  stroke: "#ffffff",
+                  strokeWidth: 2,
+                }}
+                connectNulls={false}
+              />
             </LineChart>
           </ResponsiveContainer>
         )}

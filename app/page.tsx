@@ -67,38 +67,56 @@ export default async function Home({ searchParams }: HomeProps) {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 p-8">
+    <main className="min-h-screen overflow-x-clip px-4 py-5 sm:px-6 sm:py-8 lg:px-8">
       <DashboardAnalytics />
 
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto w-full max-w-7xl">
         <DashboardNav />
 
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">
-              Sales Analytics Dashboard
-            </h1>
-
-            <p className="mt-2 text-gray-600">Overview of sales performance</p>
+        <header className="mb-7 flex flex-col gap-2">
+          <div className="inline-flex w-fit items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700">
+            <span className="h-1.5 w-1.5 rounded-full bg-indigo-600" />
+            SALES OVERVIEW
           </div>
-        </div>
+
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+            Sales Analytics Dashboard
+          </h1>
+
+          <p className="max-w-2xl text-sm leading-6 text-slate-500 sm:text-base">
+            Track revenue, monitor sales performance, and discover your
+            best-performing products.
+          </p>
+        </header>
 
         <DateRangeFilter />
 
-        <section className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <section
+          aria-label="Key performance indicators"
+          className="mt-6 grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4"
+        >
           <KPICard
             title="Total Revenue"
-            value={`₹${kpis.total_revenue.toLocaleString()}`}
+            value={`₹${kpis.total_revenue.toLocaleString("en-IN", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}`}
           />
 
-          <KPICard title="Orders" value={kpis.orders.toLocaleString()} />
+          <KPICard title="Orders" value={kpis.orders.toLocaleString("en-IN")} />
 
-          <KPICard title="AOV" value={`₹${kpis.aov.toLocaleString()}`} />
+          <KPICard
+            title="Average Order Value"
+            value={`₹${kpis.aov.toLocaleString("en-IN", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}`}
+          />
 
           <KPICard title="Top Category" value={kpis.top_category} />
         </section>
 
-        <section className="mt-8">
+        <section className="mt-6 min-w-0">
           <RevenueChart
             initialData={trend}
             startDate={startDate}
@@ -106,7 +124,7 @@ export default async function Home({ searchParams }: HomeProps) {
           />
         </section>
 
-        <section className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <section className="mt-6 grid min-w-0 grid-cols-1 gap-6 lg:grid-cols-2">
           <BreakdownChart
             title="Units Sold by Region"
             data={regions.map((item) => ({
@@ -124,7 +142,7 @@ export default async function Home({ searchParams }: HomeProps) {
           />
         </section>
 
-        <section className="mt-8">
+        <section className="mt-6 min-w-0">
           <TopProductsTable
             initialProducts={topProducts}
             startDate={startDate}
