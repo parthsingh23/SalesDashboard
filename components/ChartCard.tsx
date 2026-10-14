@@ -14,20 +14,28 @@ export default function ChartCard({
   children,
 }: ChartCardProps) {
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+    <section className="min-w-0 rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm shadow-slate-200/40 sm:p-6">
+      <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="min-w-0">
+          <h2 className="text-base font-semibold tracking-tight text-slate-900 sm:text-lg">
+            {title}
+          </h2>
 
           {description && (
-            <p className="mt-1 text-sm text-gray-500">{description}</p>
+            <p className="mt-1 text-sm leading-5 text-slate-500">
+              {description}
+            </p>
           )}
         </div>
 
-        {action && <div>{action}</div>}
+        {action && (
+          <div className="flex max-w-full flex-wrap items-center gap-2 sm:shrink-0">
+            {action}
+          </div>
+        )}
       </div>
 
-      <div className="mt-6">{children}</div>
-    </div>
+      <div className="mt-5 min-w-0 sm:mt-6">{children}</div>
+    </section>
   );
 }
