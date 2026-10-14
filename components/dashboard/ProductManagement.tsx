@@ -32,7 +32,7 @@ export default function ProductManagement({ isAdmin }: ProductManagementProps) {
         <button
           type="button"
           onClick={() => setShowForm(true)}
-          className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
+          className="min-h-10 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
         >
           Add Product
         </button>

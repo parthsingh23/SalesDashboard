@@ -73,12 +73,12 @@ export default function DateRangeFilter() {
   }
 
   return (
-    <div className="mt-6 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
-        <div>
+    <div className="mt-0">
+      <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-end">
+        <div className="min-w-0">
           <label
             htmlFor="start-date"
-            className="mb-1 block text-sm font-medium text-gray-700"
+            className="mb-1 block text-sm font-medium text-slate-700"
           >
             From
           </label>
@@ -93,14 +93,14 @@ export default function DateRangeFilter() {
               setStartDate(event.target.value);
               setError(null);
             }}
-            className="rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900"
+            className="min-h-11 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100 sm:w-auto"
           />
         </div>
 
-        <div>
+        <div className="min-w-0">
           <label
             htmlFor="end-date"
-            className="mb-1 block text-sm font-medium text-gray-700"
+            className="mb-1 block text-sm font-medium text-slate-700"
           >
             To
           </label>
@@ -115,14 +115,14 @@ export default function DateRangeFilter() {
               setEndDate(event.target.value);
               setError(null);
             }}
-            className="rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900"
+            className="min-h-11 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100 sm:w-auto"
           />
         </div>
 
         <button
           type="button"
           onClick={applyFilter}
-          className="rounded-md bg-gray-500 px-4 py-2 text-sm font-medium text-white hover:bg-gray-600"
+          className="min-h-11 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
         >
           Apply Filter
         </button>
@@ -130,14 +130,16 @@ export default function DateRangeFilter() {
         <button
           type="button"
           onClick={clearFilter}
-          className="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          className="min-h-11 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
         >
           Clear
         </button>
       </div>
 
       {error && (
-        <p className="mt-3 text-sm font-medium text-red-600">{error}</p>
+        <p role="alert" className="mt-3 text-sm font-medium text-red-700">
+          {error}
+        </p>
       )}
     </div>
   );

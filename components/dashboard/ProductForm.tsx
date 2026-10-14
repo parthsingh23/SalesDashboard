@@ -121,9 +121,9 @@ export default function ProductForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="mb-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm"
+      className="mb-6 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6"
     >
-      <h2 className="mb-4 text-lg font-semibold text-gray-900">
+      <h2 className="mb-5 text-lg font-semibold tracking-tight text-slate-900">
         {mode === "create" ? "Add Product" : "Edit Product"}
       </h2>
 
@@ -132,7 +132,7 @@ export default function ProductForm({
           <div key={name}>
             <label
               htmlFor={name}
-              className="mb-1 block text-sm font-medium text-gray-700"
+              className="mb-1 block text-sm font-medium text-slate-700"
             >
               {label}
             </label>
@@ -148,19 +148,23 @@ export default function ProductForm({
               step={
                 name === "mrp" || name === "sell_price" ? "0.01" : undefined
               }
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 outline-none focus:border-black disabled:bg-gray-100"
+              className="min-h-11 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500"
             />
           </div>
         ))}
       </div>
 
-      {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
+      {error && (
+        <p role="alert" className="mt-4 text-sm font-medium text-red-700">
+          {error}
+        </p>
+      )}
 
       <div className="mt-5 flex gap-3">
         <button
           type="submit"
           disabled={loading}
-          className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
+          className="min-h-10 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
         >
           {loading
             ? "Saving..."
@@ -172,7 +176,7 @@ export default function ProductForm({
         <button
           type="button"
           onClick={handleCancel}
-          className="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+          className="min-h-10 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
         >
           Cancel
         </button>
