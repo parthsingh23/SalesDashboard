@@ -67,7 +67,7 @@ export default async function Home({ searchParams }: HomeProps) {
   }
 
   return (
-    <main className="min-h-screen overflow-x-clip px-4 py-5 sm:px-6 sm:py-8 lg:px-8">
+    <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-slate-50 to-violet-50 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
       <DashboardAnalytics />
 
       <div className="mx-auto w-full max-w-7xl">
